@@ -162,7 +162,7 @@ void searchBySize() {
 }
 
 // ================= SWAP =================
-void requestSwap() {
+void requestSwap(char currentUser[]) {
     int id, found = 0;
 
     printf("\nEnter Cloth ID to swap: ");
@@ -170,6 +170,13 @@ void requestSwap() {
 
     for (int i = 0; i < clothCount; i++) {
         if (clothes[i].id == id) {
+
+            // Prevent user from swapping their own cloth
+            if (strcmp(clothes[i].owner, currentUser) == 0) {
+                printf(RED "❌ You cannot swap your own cloth!\n" RESET);
+                return;
+            }
+
             printf(GREEN "\n🔄 Swap request sent to %s!\n" RESET,
                    clothes[i].owner);
             found = 1;
@@ -180,6 +187,7 @@ void requestSwap() {
     if (!found)
         printf(RED "Cloth not found.\n" RESET);
 }
+
 
 // ================= MAIN =================
 int main() {
@@ -210,7 +218,8 @@ int main() {
             case 1: addCloth(currentUser); break;
             case 2: viewClothes(); break;
             case 3: searchBySize(); break;
-            case 4: requestSwap(); break;
+            case 4: requestSwap(currentUser); break;
+
         }
 
     } while (choice != 5);
